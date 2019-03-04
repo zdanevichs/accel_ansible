@@ -1,12 +1,12 @@
 ---
   - name: copy accel-ppp.conf
     copy:
-      src: files/accel-ppp.conf
+      src: accel-ppp.conf
       dest: /etc
 
   - name: copy LUA script
     copy:
-      src: files/accel-ppp.lua
+      src: accel-ppp.lua
       dest: /etc
 
   - name: copy accel-pppd
@@ -44,12 +44,12 @@
 
   - name: copy logrotate accel
     copy:
-      src: files/accel-logrotate
+      src: accel-logrotate
       dest: /etc/logrotate.d
 
   - name: copy init script
     copy:
-      src: files/accel
+      src: accel
       dest: /etc/init.d
 
   - file:
@@ -61,7 +61,7 @@
 
   - name: copy systemd file
     copy:
-      src: files/accel-ppp.service
+      src: accel-ppp.service
       dest: /etc/systemd/system/multi-user.target.wants
 
   - name: update-rc.d

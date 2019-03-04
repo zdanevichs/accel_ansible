@@ -1,28 +1,12 @@
 ---
 - name: Accel Install PlayBook
   hosts: local
-  tasks:
-
-    - name: Necessary packages
-      include: playbooks/necessary_packages.yml
-
-    - name: linux-headers
-      include: playbooks/linux-headers.yml
-
-    - name: accel-ppp packages
-      include: playbooks/accel-ppp_packages.yml
-
-    - name: accel-ppp git
-      include: playbooks/accel-ppp_git.yml
-
-    - name: configs
-      include: playbooks/accel-ppp_configs.yml
-
-    - name: nat
-      include: playbooks/nat.yml
-
-    - name: modules
-      include: playbooks/modules.yml
-
-    - name: start accel
-      include: playbooks/start_accel.yml
+  roles:
+   - necessary_packages
+   - linux-headers
+   - accel-ppp_packages
+   - accel-ppp_git
+   - files
+   - nat
+   - modules
+   - start_accel
