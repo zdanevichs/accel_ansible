@@ -17,9 +17,6 @@
   - name: libcrypto++-dev
     apt: pkg=libcrypto++-dev state=present update_cache=true
 
-  - name: libcrypto++9
-    apt: pkg=libcrypto++9 state=present update_cache=true
-
   - name: libcrypto++-utils
     apt: pkg=libcrypto++-utils state=present update_cache=true
 
@@ -32,14 +29,8 @@
   - name: libpcre++-dev
     apt: pkg=libpcre++-dev state=present update_cache=true
 
-  - name: libpcre++0
-    apt: pkg=libpcre++0 state=present update_cache=true
-
   - name: libpcre3
     apt: pkg=libpcre3 state=present update_cache=true
-
-  - name: libpcrecpp0
-    apt: pkg=libpcrecpp0 state=present update_cache=true
 
   - name: libsnmp-dev
     apt: pkg=libsnmp-dev state=present update_cache=true
@@ -55,3 +46,6 @@
 
   - name: libipset-dev
     apt: pkg=libipset-dev state=present update_cache=true
+
+  - name: accel-ppp packages for OS {{ ansible_distribution_major_version }}
+    include: "{{ ansible_distribution_major_version }}.yml"

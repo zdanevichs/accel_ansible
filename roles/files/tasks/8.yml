@@ -1,0 +1,4 @@
+---
+  - name: autorun accel
+    command: "chkconfig accel on"
+

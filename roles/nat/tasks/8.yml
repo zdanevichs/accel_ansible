@@ -1,0 +1,64 @@
+---
+  - sysctl:
+      name: net.ipv4.netfilter.ip_conntrack_max
+      value: 1572864
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_syn_recv
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_fin_wait
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_last_ack
+      value: 30
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_close
+      value: 10
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_close
+      value: 10
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_checksum
+      value: 0
+      state: present
+
+  - sysctl:
+      name: net.core.dev_weight
+      value: 16
+      state: present
+
+  - sysctl:
+      name: net.core.netdev_max_backlog
+      value: 16000
+      state: present
+
+  - sysctl:
+      name: vm.dirty_background_ratio
+      value: 5
+      state: present
+
+  - sysctl:
+      name: vm.dirty_ratio
+      value: 10
+      state: present
+      reload: yes
+
+
+
+
+
+
+
+

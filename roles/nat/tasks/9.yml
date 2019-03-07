@@ -1,0 +1,5 @@
+---
+  - sysctl:
+      name: net.nf_conntrack_max
+      value: 1572864
+      state: present

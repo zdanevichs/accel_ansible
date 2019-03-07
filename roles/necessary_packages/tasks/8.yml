@@ -1,0 +1,3 @@
+---
+  - name: chkconfig
+    apt: pkg=chkconfig state=present update_cache=true
