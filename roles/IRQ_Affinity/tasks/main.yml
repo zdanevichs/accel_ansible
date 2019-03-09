@@ -1,0 +1,7 @@
+---
+  - name: copy IRQ_Affinity
+    copy:
+      src: irq_affinity.sh
+      dest: /opt
+      mode: a+x
+

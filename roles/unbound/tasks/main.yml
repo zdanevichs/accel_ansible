@@ -1,0 +1,16 @@
+---
+  - name: install unbound
+    apt: pkg=unbound state=present update_cache=true
+
+  - name: copy unbound files
+    copy:
+      src: unbound.conf
+      dest: /etc/unbound
+
+  - name: unbound restarted
+    service:
+      name: unbound
+      state: restarted
+
+
+

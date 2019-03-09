@@ -1,0 +1,20 @@
+---
+  - name: install nginx
+    apt: pkg=nginx state=present update_cache=true
+
+  - name: copy nginx files
+    copy:
+      src: etc
+      dest: /
+
+  - name: copy pages files
+    copy:
+      src: var
+      dest: /
+
+  - name: nginx restarted
+    service:
+      name: nginx
+      state: restarted
+
+

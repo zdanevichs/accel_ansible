@@ -1,0 +1,11 @@
+---
+  - name: copy firewall
+    copy:
+      src: firewall
+      dest: /etc/init.d
+      mode: a+x
+
+  - name: update-rc.d firewall
+    command: "update-rc.d firewall defaults"
+
+

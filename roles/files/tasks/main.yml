@@ -61,7 +61,7 @@
       src: accel-ppp.service
       dest: /etc/systemd/system/multi-user.target.wants
 
-  - name: update-rc.d
+  - name: update-rc.d accel
     command: "update-rc.d accel defaults"
 
   - name: files for OS {{ ansible_distribution_major_version }}

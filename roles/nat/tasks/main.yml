@@ -109,10 +109,3 @@
 
   - name: nat for OS {{ ansible_distribution_major_version }}
     include: "{{ ansible_distribution_major_version }}.yml"
-
-#  - sysctl:
-#      name: vm.dirty_ratio
-#      value: 10
-#      state: present
-#      reload: yes
-
