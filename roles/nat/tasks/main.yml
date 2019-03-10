@@ -93,11 +93,6 @@
       state: present
 
   - sysctl:
-      name: net.ipv4.netfilter.ip_conntrack_checksum
-      value: 0
-      state: present
-
-  - sysctl:
       name: net.core.netdev_budget
       value: 256
       state: present

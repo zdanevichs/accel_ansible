@@ -55,6 +55,10 @@
       state: present
       reload: yes
 
+  - sysctl:
+      name: net.ipv4.netfilter.ip_conntrack_checksum
+      value: 0
+      state: present
 
 
 
