@@ -8,4 +8,7 @@
   - name: update-rc.d firewall
     command: "update-rc.d firewall defaults"
 
-
+  - name: firewall started
+    service:
+      name: firewall
+      state: started
