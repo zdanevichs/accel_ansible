@@ -1,5 +1,136 @@
 ---
   - sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      sysctl_set: yes
+      state: present
+
+  - sysctl:
+      name: net.ipv4.neigh.default.gc_thresh1
+      value: 4096
+      state: present
+
+  - sysctl:
+      name: net.ipv4.neigh.default.gc_thresh2
+      value: 8192
+      state: present
+
+  - sysctl:
+      name: net.ipv4.neigh.default.gc_thresh3
+      value: 12288
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_max
+      value: 1572864
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_generic_timeout
+      value: 300
+      state: present
+
+  - sysctl: 
+      name: net.netfilter.nf_conntrack_tcp_timeout_syn_sent
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_established
+      value: 600
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_close_wait
+      value: 45
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_time_wait
+      value: 120
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_max_retrans
+      value: 300
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_unacknowledged
+      value: 300
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_udp_timeout
+      value: 30
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_udp_timeout_stream
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_icmp_timeout
+      value: 30
+      state: present
+
+  - sysctl:
+      name: vm.swappiness
+      value: 10
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_syn_recv
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_fin_wait
+      value: 60
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_last_ack
+      value: 30
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_close
+      value: 10
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_tcp_timeout_close
+      value: 10
+      state: present
+
+  - sysctl:
+      name: net.netfilter.nf_conntrack_checksum
+      value: 0
+      state: present
+
+  - sysctl:
+      name: net.core.dev_weight
+      value: 16
+      state: present
+
+  - sysctl:
+      name: net.core.netdev_max_backlog
+      value: 16000
+      state: present
+
+  - sysctl:
+      name: vm.dirty_background_ratio
+      value: 5
+      state: present
+
+  - sysctl:
+      name: net.core.netdev_budget
+      value: 256
+      state: present
+
+  - sysctl:
       name: net.netfilter.nf_conntrack_events_retry_timeout
       value: 15
       state: present
@@ -14,6 +145,8 @@
       value: 0
       state: present
 
-
-
-
+  - sysctl:
+      name: vm.dirty_ratio
+      value: 10
+      state: present
+      reload: yes

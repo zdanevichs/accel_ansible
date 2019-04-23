@@ -1,6 +1,11 @@
 ---
 - name: Accel Install PlayBook
   hosts: local
+
+  pre_tasks:
+    - name: "read vars"
+      include_vars: host_vars/{{ ansible_distribution_major_version }}.yml
+
   roles:
    - necessary_packages
    - linux-headers

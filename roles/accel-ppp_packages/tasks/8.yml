@@ -1,10 +1,27 @@
 ---
-  - name: libcrypto++9
-    apt: pkg=libcrypto++9 state=present update_cache=true
-
-  - name: libpcre++0
-    apt: pkg=libpcre++0 state=present update_cache=true
-
-  - name: libpcrecpp0
-    apt: pkg=libpcrecpp0 state=present update_cache=true
+- name: Install a list of packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - git
+    - make
+    - vlan
+    - libnl-utils
+    - gcc
+    - cmake
+    - libcrypto++-dev
+    - libcrypto++9
+    - libcrypto++-utils
+    - lua5.1
+    - liblua5.1-0-dev
+    - libpcre++-dev
+    - libpcre++0
+    - libpcre3
+    - libpcrecpp0
+    - libsnmp-dev
+    - iftop
+    - iptraf
+    - ipset
+    - libipset-dev
 
