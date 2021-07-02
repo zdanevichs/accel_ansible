@@ -17,5 +17,5 @@
    - start_accel
    - firewall
    - IRQ_Affinity
-   - web_pages
-   - unbound
+  #  - web_pages
+  #  - unbound
