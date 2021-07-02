@@ -12,7 +12,8 @@
    - accel-ppp_packages
    - accel-ppp_git
    - files
-   - nat
+  #  - nat
+   - sysctl
    - modules
    - start_accel
    - firewall
