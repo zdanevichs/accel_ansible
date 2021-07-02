@@ -1,3 +1,4 @@
-wget https://github.com/mikbill/accel_ansible/raw/master/start.sh
+This is fork from https://github.com/mkbill/accel_ansible/
+wget https://github.com/zdanevichs/accel_ansible/raw/master/start.sh
 chmod +x start.sh
 ./start.sh
