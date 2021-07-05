@@ -1,0 +1,30 @@
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp1s0:
+            dhcp4: no
+        enp2s0:
+            dhcp4: no
+    vlans:
+        vlan777:
+            addresses:
+              - 10.77.0.3/16
+            id: 777
+            link: enp2s0
+        vlan18:
+            addresses:
+              - 10.18.0.3/16
+              - 2001:67c:2ee0:1::3/64
+            id: 18
+            link: enp2s0
+        vlan4:
+            addresses:
+              - 193.25.120.6/29
+              - 2001:67c:2ee0::6/64
+            gateway4: 193.25.120.5
+            gateway6: 2001:67c:2ee0::81cc
+            nameservers:
+                addresses: [8.8.8.8, 10.77.0.1, 2001:4860:4860::8844]
+            id: 4
+            link: enp1s0

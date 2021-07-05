@@ -1,0 +1,22 @@
+!
+! Zebra configuration saved from vty
+!   2021/04/29 17:43:31
+!
+hostname {{ host['stdout'] }}-ospfd
+password {{ quaggaPwd }}
+log file /var/log/quagga/ospfd.log
+!
+interface {{ lanInterface }}
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 {{ ospfMD5 }}
+ ip ospf priority 50
+ ip ospf mtu-ignore
+!
+router ospf
+ ospf router-id {{ loIp }}
+ log-adjacency-changes detail
+ network {{lanIp}} area {{ ospfArea }}
+ area {{ ospfArea }} authentication message-digest
+!
+line vty
+!

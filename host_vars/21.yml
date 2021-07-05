@@ -1,1 +1,18 @@
-kernel: "5.11.0-16-generic"
+#Network-settings
+wanVlanInterface: "eth0"
+wanInterface: "vlan5"
+wanIp: "193.28.101.6/29"
+wanIp6: "2001:67c2:2ce1::1/64"
+lanInterface: "vlan6"
+lanVlanInterface: "eth1"
+loIp: "10.0.0.1"
+lanIp: "192.168.0.1"
+lanIp6: "2001:67c2:2ce1:1::1/64"
+
+#Only if quagga enabled
+quaggaPwd: 'password'
+ospfMD5: "md5pass16litters"
+ospfArea: "0.0.0.0"
+bgpAS: "6289"
+bgpNeibhors: [{'ip': '193.28.101.1', 'as': '6289'}]
+

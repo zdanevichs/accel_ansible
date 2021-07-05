@@ -5,18 +5,25 @@
   pre_tasks:
     - name: "read vars"
       include_vars: host_vars/{{ ansible_distribution_major_version }}.yml
+    - name: "read kernel"
+      shell: uname -r
+      register: kernel
+    - name: "read host"
+      shell: uname -n
+      register: host
 
   roles:
-   - necessary_packages
-   - linux-headers
-   - accel-ppp_packages
-   - accel-ppp_git
-   - files
-  #  - nat
-   - sysctl
-   - modules
-   - start_accel
-   - firewall
-   - IRQ_Affinity
-  #  - web_pages
-  #  - unbound
+    - necessary_packages
+    - quagga
+    - linux-headers
+    - accel-ppp_packages
+    - accel-ppp_git
+    - files
+    #  - nat
+    - sysctl
+    - modules
+    - start_accel
+    - firewall
+    - IRQ_Affinity
+    #  - web_pages
+    #  - unbound

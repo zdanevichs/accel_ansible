@@ -1,0 +1,18 @@
+!
+! Zebra configuration saved from vty
+!   2021/06/28 13:50:28
+!
+hostname {{ host['stdout'] }}-bgpd
+password {{ quaggaPwd }}
+log stdout
+!
+router bgp {{ bgpAS }}
+ bgp router-id {{ loIp }}
+ redistribute connected
+ {% for nei in bgpNeibhors %}
+neighbor {{ nei.ip }} remote-as {{ nei.as }}
+ neighbor {{ nei.ip }} soft-reconfiguration inbound
+ {% endfor %}
+!
+line vty
+!
