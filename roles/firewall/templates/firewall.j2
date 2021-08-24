@@ -1,0 +1,238 @@
+#!/bin/bash
+#
+# firewall
+#
+# chkconfig: - 97 20
+#
+### BEGIN INIT INFO
+# Provides:          firewall
+# Required-Start:    $network
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Description:       Mikbill firewall builder
+### END INIT INFO
+ 
+lock_path=/var/lock/firewall.lock
+ 
+# Список IPSETов
+ipset_list=(
+1
+freezee
+disabled
+deleted
+unknown
+)
+ 
+IPT=`which iptables`
+IPS=`which ipset`
+DIG=`which dig`
+CTL=`which sysctl`
+DNS_lookup="127.0.0.1"
+ 
+# OUT интерфейс (интернет)
+out_interface1="{{ wanInterface }}"
+ 
+# IP SRC-NAT для пользователей
+# out_ext_ip1="1.2.3.4"
+ 
+# IP для редиректа на страницу заглушку
+REDIRECT_IP="127.0.0.1"
+ 
+# IP SRC-NAT для выхода на разрешенные IP
+#allowed_ext_ip="1.2.3.4"
+ 
+# название IPSETа для разрешенных IP
+allowed_ipset="allowed"
+ 
+# Список разрешенных сайтов и IP
+allowed_list=(
+{% for allow in allowList %}
+{{ allow }} 
+{% endfor %}
+)
+ 
+ 
+postrouting() {
+	# Очищаем NAT
+	$IPT -t nat -F POSTROUTING
+ 
+	# NAT для пользователей
+	#$IPT -t nat -A POSTROUTING -s 10.0.0.0/24 -o $out_interface1 -j SNAT --to-source $out_ext_ip1
+ 
+	# NAT для разрешенных IP
+	#$IPT -t nat -A POSTROUTING -m set --match-set $allowed_ipset dst -p tcp --dport 80 -o $out_interface1 -j SNAT --to-source $allowed_ext_ip
+	#$IPT -t nat -A POSTROUTING -m set --match-set $allowed_ipset dst -p tcp --dport 443 -o $out_interface1 -j SNAT --to-source $allowed_ext_ip
+	echo "POSTROUTING done"
+}
+ 
+input() {
+        $IPT -F INPUT
+ 
+        # Если используете Fail2ban SSH
+        #$IPT -N fail2ban-ssh
+        #$IPT -A INPUT -p tcp -m multiport --dports 22 -j fail2ban-ssh
+ 
+        echo "INPUT done"
+}
+ 
+raw_rules() {
+	# очищаем RAW таблицы
+	$IPT -t raw -F PREROUTING
+	$IPT -t raw -F OUTPUT
+ 
+	echo "RAW rules done"
+}
+ 
+forward() {
+	# Очищаем FORWARD
+	$IPT -F FORWARD
+ 
+	# Пропускаем трафик к разрешенным IP
+  	#$IPT -A FORWARD -m set --match-set $allowed_ipset dst -j ACCEPT
+ 
+	# Блокируем трафик пользователей в IPSETах
+	for ipset_name in ${ipset_list[*]}
+	do
+		$IPT -A FORWARD -m set --match-set $ipset_name src -j REJECT --reject-with icmp-proto-unreach
+	done
+ 
+	echo "FORWARD done"
+}
+ 
+prerouting() {
+	# Очищаем PREROUTING
+	$IPT -t nat -F PREROUTING
+ 
+	# Пропускаем трафик к разрешенным IP
+	$IPT -t nat -A PREROUTING -m set --match-set $allowed_ipset dst -j ACCEPT
+	# Перенаправляем пользователей из IPSETов на страницы заглушки
+	$IPT -t nat -A PREROUTING -m set --match-set 1 src -p tcp --dport 80 -j DNAT --to-destination $REDIRECT_IP:81
+	$IPT -t nat -A PREROUTING -m set --match-set freezee src -p tcp --dport 80 -j DNAT --to-destination $REDIRECT_IP:82
+	$IPT -t nat -A PREROUTING -m set --match-set disabled src -p tcp --dport 80 -j DNAT --to-destination $REDIRECT_IP:83
+	$IPT -t nat -A PREROUTING -m set --match-set deleted src -p tcp --dport 80 -j DNAT --to-destination $REDIRECT_IP:84
+	$IPT -t nat -A PREROUTING -m set --match-set unknown src -p tcp --dport 80 -j DNAT --to-destination $REDIRECT_IP:85
+ 
+	echo "PREROUTING done"
+}
+ 
+allow() {
+	# Очищаем IPSET разрешенных IP
+	$IPS -F $allowed_ipset
+ 
+	for row in ${allowed_list[*]}
+	do
+		# проверяем запись из списка разрешенных, явлияется ли она IP адресом
+		if [[ $row =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]];
+		then
+			# добавляем этот IP в список разрешенных
+			$IPS add $allowed_ipset $row > /dev/null 2>&1
+		else
+			# запись оказалась доменом, резолвим его IP через dig
+  			for ip in `$DIG $row +short @$DNS_lookup`
+			do
+				# добавляем полученные через dns IP адрес в список разрешенных
+				$IPS add $allowed_ipset $ip > /dev/null 2>&1
+			done
+		fi
+	done
+ 
+	echo "ALLOWED done"
+}
+ 
+start() {
+	if [ -f $lock_path ]; then
+	  echo "Firewall is running"
+	  exit 0
+	else
+	  touch $lock_path
+	fi
+ 
+	echo "Start building firewall"
+ 
+	for ipset_name in ${ipset_list[*]}
+	do
+	  $IPS -N $ipset_name iphash > /dev/null 2>&1
+	done
+ 
+	$IPS -N active iphash > /dev/null 2>&1
+	$IPS -N $allowed_ipset nethash > /dev/null 2>&1
+ 
+	allow
+        input
+	forward
+	prerouting
+	postrouting
+	raw_rules
+ 
+	$CTL -p > /dev/null 2>&1
+ 
+	echo "Firewall rules created"
+}
+ 
+stop() {
+	if [ ! -f $lock_path ]; then
+	  echo "Firewall is stoped"
+	  exit 0
+	else
+	  rm -f $lock_path
+	fi
+ 
+        $IPT -F INPUT
+	$IPT -F FORWARD
+	$IPT -t nat -F
+	$IPT -t mangle -F
+	$IPT -t raw -F PREROUTING
+	$IPT -t raw -F OUTPUT
+ 
+	$IPT -P FORWARD ACCEPT
+ 
+	echo "FORWARD/NAT/RAW flushed"
+ 
+	$CTL -p > /dev/null 2>&1
+}
+ 
+show() {
+        $IPT -L INPUT -v -n --line-numbers
+	$IPT -L FORWARD -v -n --line-numbers
+	$IPT -t nat -L PREROUTING -v -n --line-numbers
+	$IPT -t nat -L POSTROUTING -v -n --line-numbers
+	$IPT -t raw -L -v -n --line-numbers
+	$IPS list $allowed_ipset
+}
+ 
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  allow)
+    allow
+    ;;
+  input)
+    input
+    ;;
+  forward)
+    forward
+    ;;
+  pre)
+    prerouting
+    ;;
+  post)
+    postrouting
+    ;;
+  raw)
+    raw_rules
+    ;;
+  show)
+    show
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|allow|input|forward|pre|post|raw|show}"
+esac
