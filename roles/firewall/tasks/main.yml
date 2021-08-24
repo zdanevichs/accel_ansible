@@ -1,8 +1,8 @@
 ---
   - name: copy firewall
-    copy:
-      src: firewall
-      dest: /etc/init.d
+    template:
+      src: firewall.j2
+      dest: /etc/init.d/firewall
       mode: a+x
 
   - name: update-rc.d firewall

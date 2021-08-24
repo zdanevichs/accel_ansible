@@ -11,6 +11,9 @@
     - name: "read host"
       shell: uname -n
       register: host
+    - name: Set timezone to Europe/Moscow
+      command: timedatectl set-timezone Europe/Moscow
+
 
   roles:
     - necessary_packages
@@ -25,5 +28,7 @@
     - start_accel
     - firewall
     - IRQ_Affinity
-    #  - web_pages
-    #  - unbound
+    - web_pages
+    - unbound
+    - zabbix
+    - ethtool

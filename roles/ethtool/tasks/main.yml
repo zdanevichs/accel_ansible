@@ -1,0 +1,14 @@
+---
+  - name: Generate ethtool.sh
+    template:
+      src: ethtool.sh.j2
+      dest: /opt/ethtool.sh
+      mode: "a+x"
+
+  - name: "Start ethtool script"
+    command: "/opt/ethtool.sh"
+
+  - cron:
+      name: "Shedule ethtool.sh on boot time"
+      special_time: reboot
+      job: "/opt/ethtool.sh"

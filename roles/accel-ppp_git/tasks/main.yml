@@ -22,11 +22,13 @@
     copy:
       src: /usr/local/src/drivers/ipoe/driver/ipoe.ko
       dest: /lib/modules/{{ ansible_kernel }}/kernel/net
+      remote_src: yes
 
   - name: copy vlan_mon
     copy:
       src: /usr/local/src/drivers/vlan_mon/driver/vlan_mon.ko
       dest: /lib/modules/{{ ansible_kernel }}/kernel/net
+      remote_src: yes
 
   - name: update depmod
     command: "depmod -a"

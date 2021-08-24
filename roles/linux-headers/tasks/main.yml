@@ -3,6 +3,6 @@
 #    include: "{{ ansible_distribution_major_version }}.yml"
 
   - name: linux-headers
-    apt: pkg=linux-headers-{{ kernel }} state=present update_cache=true
+    apt: pkg=linux-headers-{{ kernel.stdout }} state=present update_cache=true
 
 

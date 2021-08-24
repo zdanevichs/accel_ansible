@@ -1,0 +1,11 @@
+---
+  - name: Install necessary packages
+    apt:
+      name: "zabbix-agent"
+
+  - name: copy accel monitoring files
+    copy: src={{ item.src }} dest={{ item.dest }}
+    with_items: 
+      - { src: 'accel.conf', dest: '/etc/zabbix/zabbix_agentd.conf.d/accel.conf' }
+      - { src: 'accel.sh', dest: '/opt/accel.sh' }
+

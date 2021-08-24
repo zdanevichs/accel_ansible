@@ -1,0 +1,18 @@
+#!/bin/sh
+/sbin/ethtool -K {{ lanVlanInterface }} tso off gso off gro off
+/sbin/ethtool -K {{ wanVlanInterface }} tso off gso off gro off
+
+/sbin/ethtool --offload {{ lanVlanInterface }} rx off tx off
+/sbin/ethtool --offload {{ wanVlanInterface }} rx off tx off
+
+/sbin/ethtool -K {{ lanVlanInterface }} rxvlan off txvlan off
+/sbin/ethtool -K {{ wanVlanInterface }} rxvlan off txvlan off
+
+/sbin/ethtool -G {{ lanVlanInterface }} tx 4096 rx 4096
+/sbin/ethtool -G {{ wanVlanInterface }} tx 4096 rx 4096
+
+/sbin/ifconfig {{ lanVlanInterface }} txqueuelen 10000
+/sbin/ifconfig {{ wanVlanInterface }} txqueuelen 10000
+
+/sbin/ifconfig {{ lanInterface }} txqueuelen 10000
+/sbin/ifconfig {{ wanInterface }} txqueuelen 10000

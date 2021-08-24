@@ -1,0 +1,7 @@
++ Add dirrwectory /var/log/quagga and chown quagga:quagga
++ Correction datetime and timezone
++- Zabbix monitoring (Осталось править конфиг)
++ inetutils-traceroute
+- OSPF local
+- Страница заглушка
+- Поправить radius атрибуты

@@ -1,0 +1,70 @@
+[modules]
+log_file
+radius
+shaper
+sigchld
+ipoe
+connlimit
+ 
+[core]
+log-error=/var/log/accel-ppp/core.log
+thread-count=16
+ 
+[ipoe]
+verbose=8
+password=xzcbjKASH3412j
+attr-l4-redirect=L4-Redirect
+l4-redirect-ipset=1
+shared=1
+mode=L3
+start=up
+interface={{lanInterface}}
+idle-timeout=86400
+
+{% for net in localNets %}
+local-net={{ net }}
+{% endfor %}
+
+
+[dns]
+dns1=10.77.0.1
+dns2=10.77.0.5
+ 
+[radius]
+dictionary=/usr/local/share/accel-ppp/radius/dictionary
+nas-identifier={{ host['stdout'] }}-ipoe
+nas-ip-address={{ loIp }}
+server={{ radiusIp }},{{ radiusPwd }},auth-port=1812,acct-port=1813,req-limit=30,fail-time=0
+dae-server={{ loIp }},{{ coaPwd }}
+timeout=180
+max-try=1
+acct-delay-time=0
+acct-interim-interval=86400
+acct-timeout=86400
+verbose=8
+
+ 
+[shaper]
+attr-down=PPPD-Downstream-Speed-Limit
+attr-up=PPPD-Upstream-Speed-Limit
+up-limiter=police
+down-limiter=police
+verbose=5 
+ 
+[connlimit]
+limit=10/min
+burst=1
+timeout=60
+ 
+[log]
+log-file=/var/log/accel-ppp/accel-ppp.log
+log-emerg=/var/log/accel-ppp/emerg.log
+log-fail-file=/var/log/accel-ppp/auth-fail.log
+log-debug=/var/log/accel-ppp/debug.log
+copy=1
+level=4
+ 
+[cli]
+telnet=127.0.0.1:2000
+tcp=127.0.0.1:2001
+

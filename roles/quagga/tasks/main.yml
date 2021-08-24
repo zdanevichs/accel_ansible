@@ -15,6 +15,13 @@
       - { src: 'debian.conf', dest: '/etc/quagga/debian.conf' }
       - { src: 'daemons', dest: '/etc/quagga/daemons' }
 
+  - name: "greate dirrectory for log"
+    file: 
+      path: /var/log/quagga
+      state: directory
+      owner: quagga
+      group: quagga
+
   - name: quagga restarted
     command: service {{ item }} restart 
     with_items:

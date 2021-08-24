@@ -1,8 +1,8 @@
 ---
-  - name: copy accel-ppp.conf
-    copy:
-      src: accel-ppp.conf
-      dest: /etc
+  - name: Generate accel-ppp.conf
+    template:
+      src: accel-ppp.conf.j2
+      dest: /etc/accel-ppp.conf
 
   - name: copy LUA script
     copy:
@@ -14,17 +14,20 @@
       src: /usr/local/src/sbin/accel-pppd
       dest: /usr/local/sbin
       mode: 0755
+      remote_src: yes
 
   - name: copy accel-cmd
     copy:
       src: /usr/local/src/bin/accel-cmd
       dest: /usr/local/bin
       mode: 0755
+      remote_src: yes
 
   - name: copy radius
     copy:
       src: /usr/local/src/share/accel-ppp
       dest: /usr/local/share
+      remote_src: yes
 
   - name: radius attributes
     lineinfile:
@@ -41,12 +44,28 @@
       - 'ATTRIBUTE AccelRemoteId 246 octets'
       - 'ATTRIBUTE AccelCircuitId 247 octets'
       - '#ATTRIBUTE DHCP-Attr-272 272 ipaddr'
+      - '# Limit session traffic'
+      - 'ATTRIBUTE Session-Octets-Limit 227 integer'
+      - '# What to assume as limit - 0 in+out, 1 in, 2 out, 3 max(in,out)'
+      - 'ATTRIBUTE Octets-Direction 228 integer'
+      - '# Connection Speed Limit'
+      - 'ATTRIBUTE PPPD-Upstream-Speed-Limit 230 integer'
+      - 'ATTRIBUTE PPPD-Downstream-Speed-Limit 231 integer'
+      - 'ATTRIBUTE PPPD-Upstream-Speed-Limit-1 232 integer'
+      - 'ATTRIBUTE PPPD-Downstream-Speed-Limit-1 233 integer'
+      - 'ATTRIBUTE PPPD-Upstream-Speed-Limit-2 234 integer'
+      - 'ATTRIBUTE PPPD-Downstream-Speed-Limit-2 235 integer'
+      - 'ATTRIBUTE PPPD-Upstream-Speed-Limit-3 236 integer'
+      - 'ATTRIBUTE PPPD-Downstream-Speed-Limit-3 237 integer'
+      - 'ATTRIBUTE Acct-Interim-Interval 85 integer'
+      - 'ATTRIBUTE Acct-Input-Gigawords    52      integer'
+      - 'ATTRIBUTE Acct-Output-Gigawords   53      integer'
 
   - name: copy logrotate accel
     copy:
       src: accel-logrotate
       dest: /etc/logrotate.d
-
+  
   - name: copy init script
     copy:
       src: accel
